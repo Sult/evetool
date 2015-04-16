@@ -9,7 +9,7 @@ from django.conf import settings
 
 from apps.bulk.models import Character, Corporation, Alliance
 from apps.static.models import Crpnpccorporations
-from utils import connection
+from connection import connection
 
 
 #Make sure not to many requests are made to evewho.com

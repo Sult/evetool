@@ -1,0 +1,40 @@
+{% load url_resolvers %}
+    <li>
+        &nbsp;
+    </li>
+{% if request.session.access.CharacterInfo %}
+    <li
+        {% if request.path == 'character_sheet'|find_url %} class="active"{% endif %}
+    >
+        <a href="{% url 'character_sheet' %}"><i class="fa fa-fw fa-user"></i> Character Sheet</a>
+    </li>
+{% endif %}
+{% if request.session.access.CharacterSheet %}
+    <li
+        {% if request.path == "character_skills"|find_url %} class="active"{% endif %}
+    >
+        <a href="{% url 'character_skills' %}"><i class="fa fa-fw fa-book"></i> Skills</a>
+    </li>
+{% endif %}
+{% if request.session.access.CharacterSheet %}
+    <li>
+        <a href="#"><i class="fa fa-fw fa-fighter-jet"></i> Killboard</a>
+    </li>
+{% endif %}
+{% if request.session.access.WalletJournal or request.session.access.WalletTransactions %}
+    <li>
+        <a href="javascript:;" data-toggle="collapse" data-target="#wallet"><i class="fa fa-fw fa-dollar"></i> Wallet <i class="fa fa-fw fa-caret-down"></i></a>
+        <ul id="wallet" {% if '/market/' not in request.path and '/wallet/' not in request.path %} class="collapse" {% endif %}>
+        {% if request.session.access.WalletJournal %}
+            <li>
+                <a href="{% url 'character_journal' %}"><i class="fa fa-fw fa-line-chart"></i> Journal</a>
+            </li>
+        {% endif %}
+        {% if request.session.access.WalletTransactions %}
+            <li>
+                <a href="#"><i class="fa fa-fw fa-bar-chart"></i> Transactions</a>
+            </li>
+        {% endif %}
+        </ul>
+    </li>
+{% endif %}

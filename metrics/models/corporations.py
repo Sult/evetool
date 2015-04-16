@@ -2,11 +2,9 @@ from datetime import datetime
 
 from django.db import models
 from django.utils.timezone import utc
-
-#from utils import connection
 from eveassets.models import Crpnpccorporations, Invnames
 
-import utils
+from utils import connection
 
 
 class Corporation(models.Model):
@@ -56,7 +54,7 @@ class Corporation(models.Model):
     #create a corp if corporationid does not exist yet
     @staticmethod
     def create_corporation(corp_id):
-        corp_data = utils.connection.corporationsheet(corp_id)
+        corp_data = connection.connection.corporationsheet(corp_id)
 
         if corp_data.allianceID:
             allianceid = int(corp_data.allianceID)

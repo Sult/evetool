@@ -105,11 +105,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
 
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
+# STATICFILES_FINDERS = (
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#     #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+# )
 
 TEMPLATES = [
     {
@@ -131,17 +131,20 @@ TEMPLATES = [
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #installed packages
+    'django_extensions',
+    #my packages
     'metrics',
     'eveassets',
     'users',
     'apis',
     'tasks',
+    'characters',
 )
 
 

@@ -2,7 +2,7 @@ import sys
 from django.core.management.base import BaseCommand
 
 from apps.bulk.models import Alliance
-import utils
+import connection
 
 
 # execute api tasks
@@ -11,7 +11,7 @@ class Command(BaseCommand):
     #handle is what actualy will be executed
     def handle(self, *args, **options):
         #add new alliances
-        alliances = utils.connection.api_request("AllianceList").alliances
+        alliances = connection.connection.api_request("AllianceList").alliances
 
         for alliance in alliances:
 
@@ -56,7 +56,7 @@ class Command(BaseCommand):
                 allianceid=int(alliance.allianceID),
                 executorcorpid=int(alliance.executorCorpID),
                 membercount=int(alliance.memberCount),
-                startdate=utils.common.convert_timestamp(alliance.startDate),
+                startdate=connection.common.convert_timestamp(alliance.startDate),
             )
         except:
             self.stdout.write(

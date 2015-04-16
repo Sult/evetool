@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='Account',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('category', models.NullBooleanField(choices=[(False, b'Corporation'), (True, b'Alliance'), (None, b'Coalition')])),
+                ('category', models.IntegerField(choices=[(0, b'Corporation'), (1, b'Alliance'), (2, b'Coalition')])),
                 ('membership', models.IntegerField(default=0, choices=[(0, b'Free'), (1, b'Silver'), (2, b'Gold'), (3, b'Platinum')])),
                 ('created', models.DateField(auto_now_add=True)),
                 ('paid_until', models.DateField(null=True)),
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Directors',
+            name='Director',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('account', models.ForeignKey(to='users.Account')),
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AlterUniqueTogether(
-            name='directors',
+            name='director',
             unique_together=set([('account', 'director')]),
         ),
         migrations.AlterUniqueTogether(

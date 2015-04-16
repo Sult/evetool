@@ -1,0 +1,79 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>EVETool-{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/lumen/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle navbar-toggle-sidebar collapsed">Menu</button>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-col">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">EVETool <small>v 0.1a</small></a>
+        </div>
+
+        {% include 'nav_bar_user.html' %}
+
+    </div>
+</nav>
+
+<div class="container main-container">
+    {# This is the main sidebar. It gets hidden if the user is not logged in. It takes up 2/12 of the grid when logged in, and 0/12 when logged out. #}
+
+    {% if user.is_authenticated %}
+    <div class="col-md-2 sidebar">
+        <div class="row">
+            <div class="side-menu">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="side-menu-container">
+                        <ul class="nav navbar-nav">
+                            {% include "left_nav_bar.html" %}
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <div class="col-md-10 content">
+    {% else %}
+    <div class="col-md-12 content">
+    {% endif %}
+
+    {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <div class="col-xs-12">
+        <hr>
+        EVETool is Copyright &copy; Ghitzarai &amp; Slippu 2015.<br>
+        <br>
+        <small>
+        EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf. has granted permission to [insert your name or site name] to use EVE Online and all associated logos and designs for promotional and information purposes on its website but does not endorse, and is not in any way affiliated with, [insert name or site name]. CCP is in no way responsible for the content on or functioning of this website, nor can it be liable for any damage arising from the use of this website. This material is used with limited permission of CCP Games hf. No official affiliation or endorsement by CCP Games hf is stated or implied.
+        </small>
+        </div>
+    </footer>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="{% static 'js/nav_bar.js' %}"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

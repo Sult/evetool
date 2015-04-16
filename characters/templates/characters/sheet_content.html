@@ -1,0 +1,89 @@
+{% load humanize %}
+{% load character_tags %}
+
+<div class="row">
+    <div class="col-md-8">
+        <h2 class="page-header">{{ character.charactername }}</h2>
+
+        <div style="position:relative; padding-left: 210px;">
+            <img src="{{ character.sheet_icon.url }}" alt="{{ character.charactername }}" class="img-rounded" style="position:absolute; left:0; top:0;">
+
+            <table class="table">
+            {% if paid_until %}
+                <tr>
+                    <td>Paid Until</td>
+                    <td>{{ paid_until }}</td>
+                </tr>
+            {% endif %}
+            {% if sheet %}
+                <tr>
+                    <td>Corporation</td>
+                    <td>{{ sheet.corporation }}</td>
+                </tr>
+                {% if sheet.alliance %}
+                <tr>
+                    <td>Alliance</td>
+                    <td>{{ sheet.alliance }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td>Balance</td>
+                    <td class="text-success">{{ sheet.accountBalance|intcomma }} ISK</td>
+                </tr>
+                <tr>
+                    <td>Skillpoints</td>
+                    <td>{{ sheet.skillPoints|intcomma }}</td>
+                </tr>
+                {% if in_training %}
+                <tr>
+                    <td>Currently Training</td>
+                    <td>
+                        {{ in_training.skill }}
+                        {% if in_training.finnished %}
+                         (level {{ in_training.to_level }})
+                        <br>Finnished: {{ in_training.finnished }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td>Location</td>
+                    <td>{{ sheet.lastKnownLocation }}</td>
+                </tr>
+                <tr>
+                    <td>Security Status</td>
+                    <td class="{% if sheet.securityStatus < 0%}text-danger{% else %}text-success{% endif %}">{{ sheet.securityStatus|floatformat:2 }}</td>
+                </tr>
+                {% if sheet.jumpFatigue > 180 %}
+                <tr>
+                    <td>Jump Fatigue</td>
+                    <td>{{ sheet.jumpFatigue|jump_fatigue }}</td>
+                </tr>
+                {% endif %}
+
+
+                {# colapsable implants #}
+                <tr class="accordion-toggle" data-toggle="collapse" data-target="#history">
+                    <td colspan="2" class="pointer">
+                        <i class="fa fa-caret-down"></i>&nbsp;&nbsp;Employment History
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="hiddenRow">
+                        <div class="accordion-body collapse table-responsive" id="history">
+                            <table class="table table-hover">
+                            {% for employer in employment %}
+                            <tr>
+                                <td>{{ employer.corporation }}</td>
+                                <td>{{ employer.startdate }}</td>
+                            </tr>
+                            {% endfor %}
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+            </table>
+        </div>
+    </div>
+</div>

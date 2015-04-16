@@ -1,0 +1,42 @@
+{% load add_css %}
+{# login form for guests or welcome message and dropdown for authenticated users #}
+<div class="collapse navbar-collapse" id="nav-col">
+    {% if user.is_authenticated %}
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> {{ user|capfirst }} <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="{% url 'apis' %}"><i class="fa fa-server fa-fw"></i> API</a></li>
+                {% if user.has_characters %}
+                <li><a href="#"><i class="fa fa-user fa-fw"></i> Characters</a></li>
+                {% endif %}
+                {% if user.corporation_access %}
+                <li><a href="#"><i class="fa fa-users fa-fw"></i> Corporation Management</a></li>
+                {% endif %}
+                {% if user.alliance_access %}
+                <li><a href="#"><i class="fa fa-cog fa-fw"></i> Alliance Management</a></li>
+                {% endif %}
+                {% if user.coalition_access %}
+                <li><a href="#"><i class="fa fa-cogs fa-fw"></i> Coalition Management</a></li>
+                {% endif %}
+                <li class="divider"></li>
+                <li><a href="#"><i class="fa fa-user-plus fa-fw"></i> Membership</a></li>
+                <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    {# login form in case no user is logged in  #}
+    {% else %}
+    <form class="navbar-form navbar-right" action="{% url 'index' %}" method="post">{% csrf_token %}
+        {% if login_form.non_field_errors %}
+        <strong class="form-errors">{{ login_form.non_field_errors|striptags }}</strong>
+        {% endif %}
+        {% for field in login_form %}
+            {{ field|add_css_class:"form-control input-sm" }}
+        {% endfor %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="btn btn-default btn-sm">Sign in</button>
+    </form>
+    {% endif %}
+</div>

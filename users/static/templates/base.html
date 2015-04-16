@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/lumen/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/custom.css">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle navbar-toggle-sidebar collapsed">Menu</button>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-col">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">EVETool <small>v 0.1a</small></a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="nav-col">
+            <ul class="nav navbar-nav navbar-right">
+                {% include 'nav_bar_user.html' %}
+            </ul>
+        </div>
+
+    <div>
+</nav>
+
+<div class="container-fluid main-container">
+    {# This is the main sidebar. It gets hidden if the user is not logged in. It takes up 2/12 of the grid when logged in, and 0/12 when logged out. #}
+
+    {% if user.is_authenticated %}
+    <div class="col-md-2 sidebar">
+        <div class="row">
+            <div class="side-menu">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="side-menu-container">
+                        <ul class="nav navbar-nav">
+                            {% include "left_nav_bar.html" %}
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+<!-- the main content. 12/12 if logged out, 10/12 if logged in -->
+            <div class="col-md-12 content">
+                    <div class="panel panel-warning">
+    <div class="panel-heading">Dashboard (Error: Not Logged In)</div>
+    <div class="panel-body">
+<h2>You are not logged in!</h2>
+Please <a href="#">login</a> or <a href="#">register</a>.<br><br>
+<b>Note:</b> This website is currently in alpha, and is not open to those who are not in the alliance Apocalypse Now.
+
+{{ request.user }}
+    </div>
+</div>
+            </div>
+            <footer class="pull-left footer">
+                <p class="col-md-12">
+                    <hr class="divider">
+                    EVETool is Copyright &copy; Ghitzarai &amp; Slippu 2015.<br>
+                    <small>
+                    &lt;Insert some really long statement about how CCP is no way affiliated with this site, EVE is trademark, blah blah blah&gt;
+                    </small>
+                </p>
+            </footer>
+        </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}js/nav_bar.js"></script>
+</body>
+</html>

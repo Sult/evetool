@@ -4,6 +4,9 @@ from collections import OrderedDict
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+from .users import Account, Leadership
+from apis.models import Api
+
 
 #return list of inactive users
 @staticmethod
@@ -35,7 +38,44 @@ def days_since_last_login(self):
         return "%d days ago" % delta.days
 
 
+# check if user has access to corporation settings
+def corporation_access(self):
+    if Leadership.objects.filter(
+        director=self, account__category=Account.CORPORATION
+    ).exists():
+        return True
+    elif Account.objects.filter(ceo=self, category=Account.CORPORATION):
+        return True
+
+
+def alliance_access(self):
+    if Leadership.objects.filter(
+        director=self, account__category=Account.ALLIANCE
+    ).exists():
+        return True
+    elif Account.objects.filter(ceo=self, category=Account.ALLIANCE):
+        return True
+
+
+def coalition_access(self):
+    if Leadership.objects.filter(
+        director=self, account__category=Account.COALITION
+    ).exists():
+        return True
+    elif Account.objects.filter(ceo=self, category=Account.COALITION):
+        return True
+
+
+def has_characters(self):
+    return Api.objects.filter(user=self).exclude(
+        accounttype=Api.CORPORATION
+    ).exists()
+
+
 User.add_to_class("is_inactive", is_inactive)
 User.add_to_class("days_since_last_login", days_since_last_login)
 User.add_to_class("inactive_dict", inactive_dict)
-
+User.add_to_class("corporation_access", corporation_access)
+User.add_to_class("alliance_access", alliance_access)
+User.add_to_class("coalition_access", coalition_access)
+User.add_to_class("has_characters", has_characters)

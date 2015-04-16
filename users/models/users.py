@@ -19,9 +19,9 @@ class Account(models.Model):
         (PLATINUM, "Platinum"),
     )
 
-    CORPORATION = False
-    ALLIANCE = True
-    COALITION = None
+    CORPORATION = 0
+    ALLIANCE = 1
+    COALITION = 2
     CATEGORIES = (
         (CORPORATION, "Corporation"),
         (ALLIANCE, "Alliance"),
@@ -29,7 +29,7 @@ class Account(models.Model):
     )
 
     ceo = models.ForeignKey(User)
-    category = models.NullBooleanField(choices=CATEGORIES)
+    category = models.IntegerField(choices=CATEGORIES)
     membership = models.IntegerField(choices=MEMBERSHIPS, default=FREE)
     created = models.DateField(auto_now_add=True)
     paid_until = models.DateField(null=True)
@@ -38,14 +38,11 @@ class Account(models.Model):
     name = models.CharField(max_length=254, unique=True)
     key = models.BigIntegerField(null=True)
 
-    class Meta:
-        unique_together = ["ceo", "category"]
-
     def __unicode__(self):
         return "%s: %s" % (self.ceo.username, self.name)
 
 
-class Directors(models.Model):
+class Leadership(models.Model):
     """ appointed directors that should have acces to the account pannel """
 
     account = models.ForeignKey("users.Account")

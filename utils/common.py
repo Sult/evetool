@@ -1,12 +1,7 @@
-import urllib2
-import os
 from datetime import datetime, timedelta
 
-from django.db.models import get_model
 from django.conf import settings
 from django.utils.timezone import utc
-from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
 
 
 #converts a timestamp to a aware datetime object

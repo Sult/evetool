@@ -2,7 +2,7 @@ import sys
 from django.core.management.base import BaseCommand
 
 from apps.bulk.models import SovereigntyHolder, Sovereignty
-import utils
+from utils import connection
 
 
 # execute api tasks
@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     #handle is what actualy will be executed
     def handle(self, *args, **options):
-        systems = utils.connection.api_request("Sovereignty").solarSystems
+        systems = connection.api_request("Sovereignty").solarSystems
         for sov in systems:
 
             system, created = Sovereignty.objects.get_or_create(

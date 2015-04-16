@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block page_title %}Character Sheet{% endblock %}
+
+{% block content %}
+<div id="Content"></div>
+{% endblock %}
+
+{% block js %}
+<script>
+$(function(){
+  var refresher = function () {
+    $.getJSON( "{% url 'character_sheet_data' %}", function(data) {
+      setTimeout(refresher, data.refresh_timer);
+      $("#Content").replaceWith(data.content);
+    });
+  };
+
+  setTimeout(refresher, 300); // 0.3 seconds
+});
+</script>{% endblock %}

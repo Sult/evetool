@@ -4,7 +4,7 @@ from picklefield.fields import PickledObjectField
 
 from .tasks import Task
 
-import utils
+from utils import connection
 
 
 class EveApiCache(Task):
@@ -40,7 +40,7 @@ class EveApiCache(Task):
         return "%s/%s" % (self.category, self.key)
 
     def cache_key(self):
-        return utils.connection.generate_cache_key(
+        return connection.generate_cache_key(
             self.category, self.key, api=self.api, **self.kwargs
         )
 
@@ -58,9 +58,9 @@ class EveApiCache(Task):
     # for more information look at https://neweden-dev.com/API
     def connection(self):
         if self.api:
-            api = utils.connection.auth_connect(self.api)
+            api = connection.auth_connect(self.api)
         else:
-            api = utils.connection.api_connect()
+            api = connection.api_connect()
         #return eveapi object
         return getattr(api, self.category)
 
@@ -69,8 +69,8 @@ class EveApiCache(Task):
     # so example kwargs for a WalletJournal key with 2500 rows would be
     # self.kwargs = {"characterID": some_character_id, "rowCount": 2500}
     def request_call(self):
-        connection = self.connection()
+        connect = self.connection()
         if self.kwargs:
-            return getattr(connection, self.key)(**self.kwargs)
+            return getattr(connect, self.key)(**self.kwargs)
         else:
-            return getattr(connection, self.key)()
+            return getattr(connect, self.key)()

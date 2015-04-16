@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load add_css %}
+{% load character_tags %}
+{% load humanize %}
+
+{% block page_title %}DAF - Skills{% endblock %}
+
+{% block content %}
+<div class="row">
+
+    {% if queue %}
+    <div class="col-md-6">
+        <h2 class="page-header">Skills Queue</h2>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tr>
+                    <td>
+                        <strong>Total Skill Points: </strong>{{ queue.total|intcomma }}
+                    </td>
+                    <td colspan="2">
+                        {% if queue.trainingtime %}
+                        <strong>Total Training Time: </strong>{{ queue.trainingtime }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Level</th>
+                    <th>Finnished</th>
+                </tr>
+
+                {% for skill in queue.skills %}
+                <tr>
+                    <td>
+                        <a href="{% url 'skilltree' skill.typeID|skill_pk %}">
+                            {{ skill.typeID|skill_name }}
+                        </a>
+                    </td>
+                    <td>{{ skill.level }}</td>
+                    <td>{{ skill.endTime|training_time }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="col-md-4 {% if queue %}col-md-offset-1{% endif %}">
+        <h2 class="page-header">Skills of {{ character.charactername }}</h2>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+
+            {% for group, trained in skills.all_skills.items %}
+                {% if trained %}
+                <tr class="accordion-toggle" data-toggle="collapse" data-target="#{{ group|space_to_underscore }}">
+                    <td class="pointer">
+                        <i class="fa fa-caret-down"></i>&nbsp;&nbsp;
+                        <strong>{{ group }}</strong> -
+                        points:
+                        {{ group|total_skillpoints:skills.skillpoints|intcomma }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="hiddenRow" colspan="2">
+                        <div class="accordion-body collapse table-responsive" id="{{ group|space_to_underscore }}">
+                            <table class="table table-hover">
+                            {% for skill in trained %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'skilltree' skill.skill.id %}">{{ skill.skill.typename }}</a>
+                                    </td>
+                                    <td>{{ skill.level }}</td>
+                                </tr>
+                            {% endfor %}
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+        </div>
+        <br>
+    </div>
+
+</div>
+{% endblock %}

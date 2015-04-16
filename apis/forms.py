@@ -1,9 +1,8 @@
 import re
 
 from django import forms
-from utils.connection import api_connect
 
-from apps.apies.models import Api
+from .models import Api
 from utils.common import convert_timestamp
 
 import utils
@@ -24,7 +23,6 @@ class ApiForm(forms.Form):
 
     def clean_key_ID(self):
         data = self.cleaned_data['key_ID']
-        print data
         try:
             int(data)
         except ValueError:

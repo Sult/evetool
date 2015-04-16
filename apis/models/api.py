@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from .accessmask import Call
 #from tasks.models import EveApiCache
-import utils
+from utils import connection
 from utils.common import convert_timestamp, lookahead
 
 
@@ -36,7 +36,7 @@ class Api(models.Model):
     #update api and remake related models
     def update(self):
         #update api fields
-        info = utils.connection.api_request("ApiKeyInfo", api=self)
+        info = connection.api_request("ApiKeyInfo", api=self)
         self.expires = convert_timestamp(info.key.expires)
         self.accessmask = int(info.key.accessMask)
         self.save()
@@ -85,7 +85,7 @@ class Api(models.Model):
                 corporationname=str(char.corporationName),
             )
 
-            utils.connection.update_icons(
+            connection.update_icons(
                 new,
                 new.characterid,
                 "Character",

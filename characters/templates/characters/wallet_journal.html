@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load humanize %}
+{% load character_tags %}
+{% load add_css %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/charts.css' %}">
+{% endblock %}
+
+
+
+{% block page_title %}Wallet Journal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10">
+        <h2 class="page-header">Wallet Journal of {{ character.charactername }}</h2>
+
+        {# balance graph of last month #}
+        <div class="row">
+            <div id="monthlyBalance" class="col-md-12" style="height: 250px;">
+            </div>
+        </div>
+
+        {# overview of paginated transactions #}
+        <div class="table-responsive v-offset-top-5">
+
+            <form action="{% url 'register_user' %}" method="post">
+                {% csrf_token %}
+
+                <div class="form-inline">
+                {% for field in filter_form %}
+                    {{ field|addcss:"form-control" }}
+                {% endfor %}
+                    <button type="submit" class="btn btn-primary btn-sm form-inline">Filter</button>
+                </div>
+            </form>
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entry in transactions.object_list %}
+                    <tr>
+                        <td>{{ entry.date }}</td>
+                        <td>{{ entry.reftypeid|reftypename }}</td>
+                        <td class="text-right {% if entry.amount > 0 %}text-success{% else %}text-danger{% endif %}">
+                            {{ entry.amount|intcomma }}
+                        </td>
+                        <td class="text-right text-success">
+                            {{ entry.balance|intcomma }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {# The following renders the pagination html #}
+            <div id="pagination" class="text-center">
+                {{ transactions.render }}
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="//cdn.jsdelivr.net/numeraljs/1.5.0/numeral.min.js"></script>
+
+<script>
+$.getJSON("{% url 'wallet_balance_chart' 'monthly_balance' %}",
+    function(options) {
+
+    // set number symbols
+    Highcharts.setOptions({
+        lang: {
+            numericSymbols: [ "k" , "M" , "B" , "T" , "Q" ]
+        }
+    })
+
+    // add tooltip
+    options.tooltip = {
+        borderWidth: 0,
+        borderRadius: 0,
+        shadow: false,
+        useHTML: true,
+        backgroundColor: "rgba(255,255,255,1)",
+        formatter: function() {
+            return Highcharts.dateFormat('%e. %b %Y', new Date(this.x))
+             + "<br>" + numeral(this.y).format('0,0') + " ISK" ;
+        }
+    }
+
+    chart = new Highcharts.Chart(options);
+});
+</script>
+{% endblock %}
